@@ -3,114 +3,330 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energy Transfer EDU - Interactive Science Learning</title>
+  <title>Student Headquarters - Energy Transfer EDU</title>
   <style>
     :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
+      --bg-dark: #090d16;
+      --card-bg: #111a2e;
+      --card-hover: #17233d;
+      --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --accent-cyan: #38bdf8;
-      --accent-purple: #a855f7;
-      --accent-green: #22c55e;
-      --border-color: #334155;
+      --accent-green: #4ade80;
+      --accent-purple: #c084fc;
+      --accent-orange: #fb923c;
+      --accent-yellow: #facc15;
+      --border-color: #1e293b;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding: 20px; }
 
-    /* NAVBAR */
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 1.5rem; font-weight: bold; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
-    .nav-links { display: flex; gap: 15px; }
-    .btn { padding: 10px 20px; border-radius: 8px; font-weight: bold; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
-    .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
-    .btn-outline:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
-    .btn-primary { background: var(--accent-cyan); color: #000; }
-    .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+    /* TOP HUD NAVBAR */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: rgba(17, 26, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+    .brand h1 { font-size: 1.3rem; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
 
-    /* HERO SECTION */
-    header.hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 20px 60px; max-width: 900px; margin: 0 auto; }
-    .hero-badge { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px; }
-    .hero h1 { font-size: 3.2rem; line-height: 1.2; margin-bottom: 20px; background: linear-gradient(135deg, #fff 30%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 35px; max-width: 650px; line-height: 1.6; }
-    .hero-ctas { display: flex; gap: 20px; }
+    .student-hud { display: flex; align-items: center; gap: 14px; }
+    .hud-chip {
+      background: #0b1120;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hud-chip.xp { color: var(--accent-yellow); border-color: rgba(250, 204, 21, 0.3); }
+    .hud-chip.streak { color: var(--accent-orange); border-color: rgba(251, 146, 60, 0.3); }
+    .hud-chip.level { color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
 
-    /* FEATURES GRID */
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
-    .feature-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; transition: transform 0.2s; }
-    .feature-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); }
-    .feature-icon { font-size: 2.2rem; margin-bottom: 15px; }
-    .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
-    .feature-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+    .btn-logout {
+      background: rgba(220, 38, 38, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(220, 38, 38, 0.4);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: #dc2626; color: white; }
 
-    footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; }
+    /* HERO WELCOME & LEVEL PROGRESS */
+    .hero-banner {
+      background: linear-gradient(135deg, #13122b 0%, #0f172a 100%);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+      padding: 24px 30px;
+      margin-bottom: 28px;
+    }
+    .hero-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .hero-title h2 { font-size: 1.6rem; color: var(--text-main); }
+    .hero-title p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+    
+    .level-container { width: 100%; }
+    .level-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; color: var(--accent-cyan); }
+    .progress-bar-bg { background: #0b1120; height: 10px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+    .progress-bar-fill { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); height: 100%; width: 45%; transition: width 0.5s ease; }
+
+    /* DASHBOARD LAYOUT */
+    .layout-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
+
+    /* MISSIONS SECTION */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-title { font-size: 1.2rem; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; }
+
+    .missions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+    .mission-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .mission-card:hover {
+      transform: translateY(-4px);
+      background: var(--card-hover);
+      border-color: var(--accent-cyan);
+    }
+
+    .mission-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .mission-icon { font-size: 1.8rem; background: rgba(56, 189, 248, 0.1); padding: 8px; border-radius: 10px; }
+    .badge-xp { background: rgba(250, 204, 21, 0.15); color: var(--accent-yellow); border: 1px solid rgba(250, 204, 21, 0.3); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+
+    .mission-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 6px; }
+    .mission-desc { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 16px; line-height: 1.4; }
+
+    .btn-start {
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-start:hover { filter: brightness(1.15); box-shadow: 0 0 12px rgba(56, 189, 248, 0.3); }
+
+    /* SIDEBAR BADGES & STATS */
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .sidebar-card h4 { font-size: 1rem; color: var(--accent-purple); margin-bottom: 14px; }
+
+    .badges-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+    .badge-item { background: #0b1120; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; }
+    .badge-icon { font-size: 1.5rem; margin-bottom: 4px; }
+    .badge-name { font-size: 0.7rem; color: var(--text-muted); }
+
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      z-index: 1000;
+    }
+
+    @media (max-width: 850px) {
+      .layout-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="logo">⚡ Energy Transfer EDU</div>
-    <div class="nav-links">
-      <a href="login.html" class="btn btn-outline">Log In</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
-    </div>
-  </nav>
+  <div id="loading-overlay">Initializing Cadet Dashboard...</div>
 
-  <header class="hero">
-    <div class="hero-badge">🎓 Gamified Science Learning</div>
-    <h1>Master Thermodynamics & Energy Concepts Interactively</h1>
-    <p>Engage students with interactive matching missions, drag-and-drop challenges, and real-time score tracking built for modern classrooms.</p>
-    <div class="hero-ctas">
-      <a href="register.html" class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;">Start Playing Now 🚀</a>
-      <a href="login.html" class="btn btn-outline" style="padding: 14px 28px; font-size: 1rem;">Teacher / Admin Login</a>
+  <header>
+    <div class="brand">
+      <h1>⚡ Energy Transfer EDU</h1>
+    </div>
+    <div class="student-hud">
+      <div class="hud-chip streak">🔥 <span id="user-streak">1</span> Day</div>
+      <div class="hud-chip xp">⭐ <span id="user-xp">0</span> XP</div>
+      <div class="hud-chip level">🛡️ Lvl <span id="user-level">1</span></div>
+      <button class="btn-logout" id="logout-btn">Log Out</button>
     </div>
   </header>
 
-  <section class="features">
-    <div class="feature-card">
-      <div class="feature-icon">🎮</div>
-      <h3>Interactive Gameplay</h3>
-      <p>Connect-the-dots and drag-and-drop mechanics replace boring traditional quizzes.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Teacher Dashboard</h3>
-      <p>Easily design customized energy quizzes and view student submission metrics instantly.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🛡️</div>
-      <h3>Role Management</h3>
-      <p>Secure authentication powered by Supabase with role routing for students, teachers, and admins.</p>
-    </div>
-  </section>
+  <main class="layout-grid">
+    <div>
+      <div class="hero-banner">
+        <div class="hero-header">
+          <div class="hero-title">
+            <h2>Welcome back, <span id="student-name" style="color: var(--accent-cyan);">Cadet</span>! 👋</h2>
+            <p>Ready to master thermodynamics today?</p>
+          </div>
+        </div>
+        <div class="level-container">
+          <div class="level-label">
+            <span>Level <span id="lvl-num">1</span> Progress</span>
+            <span id="xp-progress-text">0 / 500 XP</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill" style="width: 10%;"></div>
+          </div>
+        </div>
+      </div>
 
-  <footer>
-    &copy; 2026 Energy Transfer Educational Platform. Built for GitHub Pages & Supabase.
-  </footer>
+      <div class="section-header">
+        <h3 class="section-title">🚀 Active Energy Missions</h3>
+      </div>
+
+      <div class="missions-grid" id="missions-container">
+        <!-- Missions rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-card">
+        <h4>🏆 Earned Badges</h4>
+        <div class="badges-grid">
+          <div class="badge-item">
+            <div class="badge-icon">⚡</div>
+            <div class="badge-name">First Spark</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">🔥</div>
+            <div class="badge-name">Heat Wave</div>
+          </div>
+          <div class="badge-item" style="opacity: 0.4;">
+            <div class="badge-icon">🔒</div>
+            <div class="badge-name">Master</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h4>💡 Quick Tip</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Connect the dots carefully during matching missions to maximize your total XP output!
+        </p>
+      </div>
+    </aside>
+  </main>
 
   <script type="module">
-    import { supabase } from './js/supabase.js';
+    import { supabase } from '../js/supabase.js';
 
-    // Auto-route user to their dashboard if already logged in
-    async function checkExistingSession() {
+    let currentUser = null;
+
+    async function initStudentPortal() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
 
-        if (profile) {
-          if (profile.role === 'admin') window.location.href = 'admin/dashboard.html';
-          else if (profile.role === 'teacher') window.location.href = 'teacher/dashboard.html';
-          else window.location.href = 'student/dashboard.html';
-        }
+      if (!session) {
+        window.location.href = '../login.html';
+        return;
       }
+
+      currentUser = session.user;
+
+      // Fetch Profile Details
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (profile) {
+        const name = profile.full_name || currentUser.email.split('@')[0];
+        const xp = profile.xp ?? 150;
+        const streak = profile.streak ?? 1;
+        const level = profile.level ?? 1;
+
+        document.getElementById('student-name').textContent = name;
+        document.getElementById('user-xp').textContent = xp;
+        document.getElementById('user-streak').textContent = streak;
+        document.getElementById('user-level').textContent = level;
+        document.getElementById('lvl-num').textContent = level;
+
+        // Progress Bar Calculation
+        const targetXP = level * 500;
+        const currentLevelXP = xp % 500;
+        const fillPercent = Math.min(Math.max((currentLevelXP / 500) * 100, 10), 100);
+        document.getElementById('xp-progress-text').textContent = `${currentLevelXP} / 500 XP`;
+        document.getElementById('progress-fill').style.width = `${fillPercent}%`;
+      }
+
+      document.getElementById('loading-overlay').style.display = 'none';
+
+      await loadMissions();
     }
 
-    checkExistingSession();
+    async function loadMissions() {
+      const container = document.getElementById('missions-container');
+      container.innerHTML = '<p style="color: var(--text-muted);">Loading missions...</p>';
+
+      const { data: quizzes, error } = await supabase
+        .from('quizzes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error || !quizzes || quizzes.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted);">No energy missions active right now.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      const icons = ['⚡', '🔥', '🌊', '☀️', '💡', '🧪'];
+
+      quizzes.forEach((quiz, index) => {
+        const icon = icons[index % icons.length];
+        const card = document.createElement('div');
+        card.className = 'mission-card';
+
+        card.innerHTML = `
+          <div>
+            <div class="mission-top">
+              <div class="mission-icon">${icon}</div>
+              <span class="badge-xp">+100 XP</span>
+            </div>
+            <div class="mission-title">${quiz.title}</div>
+            <div class="mission-desc">Complete interactive energy challenges in this topic.</div>
+          </div>
+          <button class="btn-start" onclick="launchQuiz('${quiz.id}')">Start Mission 🚀</button>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    window.launchQuiz = function(quizId) {
+      window.location.href = `../quiz.html?quiz=${quizId}`;
+    };
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = '../login.html';
+    });
+
+    initStudentPortal();
   </script>
 </body>
 </html>
