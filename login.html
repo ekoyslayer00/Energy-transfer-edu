@@ -154,7 +154,7 @@
   <div class="auth-card">
     <div class="brand-header">
       <h1>⚡ Energy Transfer EDU</h1>
-      <p>Terminal Access Clearance</p>
+      <p></p>
     </div>
 
     <form id="login-form">
@@ -172,7 +172,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-submit" id="submit-btn">Authorize Session 🚀</button>
+      <button type="submit" class="btn-submit" id="submit-btn">LOG IN</button>
     </form>
 
     <div class="status-msg" id="status-box"></div>
@@ -197,7 +197,7 @@
       if (error) {
         showStatus(error.message, 'error');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Authorize Session 🚀';
+        submitBtn.textContent = 'LOG IN';
         return;
       }
 
