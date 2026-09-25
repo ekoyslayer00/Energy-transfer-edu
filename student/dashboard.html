@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, Student!</h1>
+        <p>Ready to test your knowledge on Energy Transfer?</p>
+        
+        <div style="margin-top: 2rem;">
+            <h2>Available Quizzes</h2>
+            <div style="border: 1px solid #ccc; padding: 1rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Energy Transfer Assessment (10 Questions)</span>
+                <button onclick="window.location.href='quiz.html'" style="width: auto;">Start Quiz</button>
+            </div>
+        </div>
+
+        <button id="logout-btn" style="margin-top: 3rem; background: #EF4444;">Log Out</button>
+    </div>
+    <script type="module" src="../js/auth.js"></script>
+</body>
+</html>
