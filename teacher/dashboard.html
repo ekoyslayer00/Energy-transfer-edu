@@ -1,74 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard - Energy Transfer EDU</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --border-color: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); padding: 24px; }
+
+    header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 28px; }
+    header h1 { font-size: 1.5rem; color: var(--accent-purple); display: flex; align-items: center; gap: 8px; }
+    .user-info { display: flex; align-items: center; gap: 16px; }
+    .role-badge { background: var(--accent-blue); color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+    .btn-logout { background: var(--accent-red); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+    .btn-logout:hover { opacity: 0.85; }
+
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; }
+    @media (max-width: 992px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--card-bg); padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 24px; }
+    .card-title { font-size: 1.2rem; color: var(--accent-blue); font-weight: 600; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+    .form-control { width: 100%; background: #0f172a; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+    .form-control:focus { border-color: var(--accent-blue); }
+    textarea.form-control { min-height: 100px; font-family: monospace; font-size: 0.88rem; resize: vertical; }
+
+    .btn-primary { background: var(--accent-purple); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; width: 100%; }
+    .btn-primary:hover { background: #9333ea; }
+    .btn-secondary { background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; }
+    .btn-secondary:hover { background: #475569; }
+
+    .quick-templates { display: flex; gap: 8px; margin-bottom: 12px; }
+
+    .status-msg { font-size: 0.85rem; margin-top: 8px; text-align: center; }
+    .status-msg.error { color: var(--accent-red); }
+    .status-msg.success { color: var(--accent-green); }
+
+    #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; z-index: 1000; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>Teacher Dashboard</h1>
-            <button id="logout-btn" style="width: auto; background: #EF4444;">Log Out</button>
-        </div>
-        
-        <hr style="margin: 2rem 0;">
 
-        <!-- SECTION 1: Create a Quiz -->
-        <h2>1. Create a New Quiz</h2>
-        <form id="create-quiz-form" style="display: flex; gap: 1rem;">
-            <input type="text" id="quiz-title" placeholder="e.g., Thermal Energy Basics" required style="margin: 0;">
-            <button type="submit" style="width: auto;">Create Quiz</button>
+  <div id="loading-overlay">Authenticating Teacher Access...</div>
+
+  <header>
+    <h1>🎓 Teacher Dashboard</h1>
+    <div class="user-info">
+      <span id="user-email">teacher@game.com</span>
+      <span class="role-badge">Teacher</span>
+      <button class="btn-logout" id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    
+    <!-- LEFT COLUMN: CREATE QUIZ -->
+    <div>
+      <div class="card">
+        <div class="card-title">1. Create a New Quiz</div>
+        <form id="create-quiz-form">
+          <div class="form-group">
+            <label for="quiz-title">Quiz Title</label>
+            <input type="text" id="quiz-title" class="form-control" placeholder="e.g., Thermal Energy Basics" required>
+          </div>
+          <button type="submit" class="btn-primary">Create Quiz</button>
+          <div id="create-quiz-status" class="status-msg"></div>
         </form>
-        <p id="quiz-msg" style="color: green; display: none;">Quiz created successfully!</p>
+      </div>
 
-        <hr style="margin: 2rem 0;">
-
-        <!-- SECTION 2: Add Questions -->
-        <h2>2. Add Questions to Quiz</h2>
-        <form id="add-question-form">
-            <label for="quiz-select">Select Quiz</label>
-            <select id="quiz-select" required style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="">Loading quizzes...</option>
-            </select>
-
-            <label for="question-type">Question Type</label>
-            <select id="question-type" required style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="poll">Poll (Multiple Choice)</option>
-                <option value="drag_drop">Drag & Drop</option>
-                <option value="connect_the_dot">Connect the Dots</option>
-            </select>
-
-            <!-- DYNAMIC FIELDS: Poll -->
-            <div id="fields-poll" class="type-fields" style="display: block; background: #F9FAFB; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
-                <label>Question Text</label>
-                <input type="text" id="poll-q" placeholder="What is conduction?">
-                
-                <label>Options (Comma separated)</label>
-                <input type="text" id="poll-opts" placeholder="Heat transfer by touch, Heat transfer by light, ...">
-                
-                <label>Correct Option Index (0 = first option, 1 = second, etc.)</label>
-                <input type="number" id="poll-ans" min="0" max="3" value="0">
-            </div>
-
-            <!-- DYNAMIC FIELDS: Drag & Drop / Connect the Dots -->
-            <!-- We use textareas here so you can paste the raw JSON structure for these complex mechanics -->
-            <div id="fields-complex" class="type-fields" style="display: none; background: #F9FAFB; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
-                <p style="font-size: 0.9rem; color: #666;">For Drag & Drop and Connect the Dots, define the data structures in JSON.</p>
-                
-                <label>Content JSON (Instructions, items, dots, etc.)</label>
-                <textarea id="complex-content" rows="4" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; font-family: monospace;" placeholder='{"instruction": "Match the terms"}'></textarea>
-                
-                <label>Correct Answer JSON (Mappings, coordinate pairs, etc.)</label>
-                <textarea id="complex-ans" rows="4" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; font-family: monospace;" placeholder='{"matches": {"A":"B"}}'></textarea>
-            </div>
-
-            <button type="submit">Save Question</button>
-        </form>
-        <p id="question-msg" style="color: green; display: none;">Question added successfully!</p>
+      <div class="card">
+        <div class="card-title">Existing Quizzes</div>
+        <ul id="quiz-list" style="list-style: none; color: var(--text-muted); font-size: 0.9rem;">
+          <li>Loading quizzes...</li>
+        </ul>
+      </div>
     </div>
 
-    <script type="module" src="../js/teacher.js"></script>
+    <!-- RIGHT COLUMN: ADD QUESTION -->
+    <div>
+      <div class="card">
+        <div class="card-title">2. Add Questions to Quiz</div>
+        <form id="add-question-form">
+          
+          <div class="form-group">
+            <label for="select-quiz">Select Quiz</label>
+            <select id="select-quiz" class="form-control" required>
+              <option value="">Loading available quizzes...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="question-type">Question Type</label>
+            <select id="question-type" class="form-control">
+              <option value="Connect the Dots">Connect the Dots</option>
+              <option value="Drag & Drop">Drag & Drop</option>
+              <option value="Multiple Choice">Multiple Choice</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="margin:0;">Content JSON (Instructions, items, dots)</label>
+              <div class="quick-templates">
+                <button type="button" class="btn-secondary" id="preset-dots">Dots Template</button>
+                <button type="button" class="btn-secondary" id="preset-drag">Drag Template</button>
+              </div>
+            </div>
+            <textarea id="content-json" class="form-control" placeholder='{"instruction": "Match the terms"}' required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="correct-json">Correct Answer JSON (Mappings / Solutions)</label>
+            <textarea id="correct-json" class="form-control" placeholder='{"matches": {"A": "B"}}' required></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="background: var(--accent-blue); color: #000;">Add Question to Quiz</button>
+          <div id="add-question-status" class="status-msg"></div>
+
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import { supabase } from '../js/supabase.js';
+
+    let currentUser = null;
+
+    // Check Auth & Teacher Privileges
+    async function initTeacherDashboard() {
+      const { data: { session }, error } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = '../login.html';
+        return;
+      }
+
+      currentUser = session.user;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (!profile || (profile.role !== 'teacher' && profile.role !== 'admin')) {
+        alert('Access Denied: Teacher or Admin privileges required.');
+        window.location.href = '../login.html';
+        return;
+      }
+
+      document.getElementById('user-email').textContent = currentUser.email;
+      document.getElementById('loading-overlay').style.display = 'none';
+
+      await fetchQuizzes();
+    }
+
+    // Fetch Quizzes from Supabase
+    async function fetchQuizzes() {
+      const quizSelect = document.getElementById('select-quiz');
+      const quizList = document.getElementById('quiz-list');
+
+      quizSelect.innerHTML = '<option value="">Loading...</option>';
+
+      const { data: quizzes, error } = await supabase
+        .from('quizzes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching quizzes:', error);
+        quizSelect.innerHTML = '<option value="">Error loading quizzes (Check Table)</option>';
+        quizList.innerHTML = '<li style="color: var(--accent-red);">Failed to load quizzes. Ensure "quizzes" table exists in Supabase.</li>';
+        return;
+      }
+
+      if (!quizzes || quizzes.length === 0) {
+        quizSelect.innerHTML = '<option value="">No quizzes found. Create one first!</option>';
+        quizList.innerHTML = '<li>No quizzes created yet.</li>';
+        return;
+      }
+
+      // Populate Select Dropdown & List View
+      quizSelect.innerHTML = '<option value="">-- Choose a Quiz --</option>';
+      quizList.innerHTML = '';
+
+      quizzes.forEach(quiz => {
+        const option = document.createElement('option');
+        option.value = quiz.id;
+        option.textContent = quiz.title;
+        quizSelect.appendChild(option);
+
+        const li = document.createElement('li');
+        li.style.padding = '6px 0';
+        li.style.borderBottom = '1px solid var(--border-color)';
+        li.innerHTML = `📌 <strong>${quiz.title}</strong>`;
+        quizList.appendChild(li);
+      });
+    }
+
+    // Create New Quiz
+    document.getElementById('create-quiz-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('create-quiz-status');
+      const title = document.getElementById('quiz-title').value.trim();
+
+      status.textContent = 'Creating quiz...';
+      status.className = 'status-msg';
+
+      const { data, error } = await supabase
+        .from('quizzes')
+        .insert([{ title, created_by: currentUser.id }])
+        .select();
+
+      if (error) {
+        status.textContent = 'Error: ' + error.message;
+        status.className = 'status-msg error';
+      } else {
+        status.textContent = 'Quiz created successfully!';
+        status.className = 'status-msg success';
+        document.getElementById('quiz-title').value = '';
+        await fetchQuizzes();
+      }
+    });
+
+    // Add Question to Quiz
+    document.getElementById('add-question-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('add-question-status');
+      const quizId = document.getElementById('select-quiz').value;
+      const questionType = document.getElementById('question-type').value;
+      const contentJsonRaw = document.getElementById('content-json').value.trim();
+      const correctJsonRaw = document.getElementById('correct-json').value.trim();
+
+      if (!quizId) {
+        alert('Please select a quiz first.');
+        return;
+      }
+
+      // Validate JSON formatting
+      let contentJson, correctJson;
+      try {
+        contentJson = JSON.parse(contentJsonRaw);
+        correctJson = JSON.parse(correctJsonRaw);
+      } catch (err) {
+        alert('Invalid JSON formatting! Please check your syntax (quotes and commas).');
+        return;
+      }
+
+      status.textContent = 'Saving question...';
+      status.className = 'status-msg';
+
+      const { error } = await supabase
+        .from('questions')
+        .insert([{
+          quiz_id: quizId,
+          type: questionType,
+          content: contentJson,
+          correct_answer: correctJson
+        }]);
+
+      if (error) {
+        status.textContent = 'Error: ' + error.message;
+        status.className = 'status-msg error';
+      } else {
+        status.textContent = 'Question added successfully!';
+        status.className = 'status-msg success';
+        document.getElementById('content-json').value = '';
+        document.getElementById('correct-json').value = '';
+      }
+    });
+
+    // Preset JSON Templates
+    document.getElementById('preset-dots').addEventListener('click', () => {
+      document.getElementById('content-json').value = JSON.stringify({
+        instruction: "Connect each thermal terms to its definition",
+        left_dots: ["Conduction", "Convection", "Radiation"],
+        right_dots: ["Heat transfer through fluid movement", "Direct touch heat transfer", "Heat transfer through electromagnetic waves"]
+      }, null, 2);
+
+      document.getElementById('correct-json').value = JSON.stringify({
+        matches: {
+          "Conduction": "Direct touch heat transfer",
+          "Convection": "Heat transfer through fluid movement",
+          "Radiation": "Heat transfer through electromagnetic waves"
+        }
+      }, null, 2);
+    });
+
+    document.getElementById('preset-drag').addEventListener('click', () => {
+      document.getElementById('content-json').value = JSON.stringify({
+        instruction: "Drag energy sources into correct categories",
+        items: ["Solar Panel", "Coal Plant", "Wind Turbine"],
+        targets: ["Renewable", "Non-Renewable"]
+      }, null, 2);
+
+      document.getElementById('correct-json').value = JSON.stringify({
+        "Solar Panel": "Renewable",
+        "Wind Turbine": "Renewable",
+        "Coal Plant": "Non-Renewable"
+      }, null, 2);
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = '../login.html';
+    });
+
+    initTeacherDashboard();
+  </script>
 </body>
 </html>
