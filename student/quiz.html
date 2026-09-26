@@ -19,122 +19,105 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding: 24px; display: flex; flex-direction: column; align-items: center; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding: 24px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
 
     /* HUD HEADER */
-    .quiz-hud { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 16px 24px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 24px; }
+    .quiz-hud { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 16px 24px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
     .hud-stat { font-weight: bold; font-size: 1.1rem; }
-    .btn-quit { background: #334155; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
-    .btn-quit:hover { background: #475569; }
+    .btn-quit { background: #334155; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.85rem; font-weight: bold; text-align: center; }
 
     /* QUIZ CARD CONTAINER */
     .quiz-card { width: 100%; max-width: 850px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
     .question-title { font-size: 1.3rem; color: var(--accent-cyan); margin-bottom: 24px; font-weight: 600; text-align: center; }
 
+    /* MEDIA RENDERING STYLES */
+    .quiz-img { max-width: 80px; max-height: 80px; border-radius: 8px; object-fit: contain; background: rgba(0,0,0,0.2); padding: 4px; border: 1px solid var(--border-color); }
+
     /* 1. CONNECT THE DOTS ENGINE */
-    .dots-wrapper { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin: 20px 0; }
+    .dots-wrapper { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 20px 0; width: 100%; }
     .svg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
     .dots-column { display: flex; flex-direction: column; gap: 16px; z-index: 10; }
-    .dot-node { background: #0f172a; border: 2px solid var(--border-color); padding: 14px 18px; border-radius: 10px; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; user-select: none; }
-    .dot-node:hover { border-color: var(--accent-cyan); background: #1e2d4a; }
+    .dot-node { background: #0f172a; border: 2px solid var(--border-color); padding: 12px 14px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; user-select: none; min-height: 60px; gap: 10px; }
     .dot-node.selected { border-color: var(--accent-yellow); background: rgba(250, 204, 21, 0.15); box-shadow: 0 0 12px rgba(250, 204, 21, 0.3); }
     .dot-node.matched { border-color: var(--accent-green); background: rgba(74, 222, 128, 0.15); }
 
     /* 2. DRAG AND DROP ENGINE */
-    .drag-pool { display: flex; flex-wrap: wrap; gap: 12px; background: #0f172a; padding: 16px; border-radius: 12px; border: 1px dashed var(--border-color); min-height: 60px; margin-bottom: 24px; }
-    .drag-chip { background: var(--accent-purple); color: #fff; font-weight: bold; padding: 10px 18px; border-radius: 20px; cursor: grab; user-select: none; transition: transform 0.15s; display: inline-block; }
-    .drag-chip:active { cursor: grabbing; transform: scale(1.05); }
-    
-    .targets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .drop-zone { background: #0f172a; border: 2px dashed var(--border-color); border-radius: 12px; padding: 16px; min-height: 140px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s; }
-    .drop-zone.drag-over { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.05); }
-    .drop-zone-title { font-weight: bold; font-size: 0.95rem; color: var(--accent-cyan); text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+    .drag-pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; background: #0f172a; padding: 16px; border-radius: 12px; border: 1px dashed var(--border-color); min-height: 80px; margin-bottom: 24px; }
+    .drag-chip { background: var(--accent-purple); color: #fff; font-weight: bold; padding: 8px 14px; border-radius: 12px; cursor: grab; user-select: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+    .targets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .drop-zone { background: #0f172a; border: 2px dashed var(--border-color); border-radius: 12px; padding: 16px; min-height: 140px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .drop-zone-title { font-weight: bold; font-size: 0.95rem; color: var(--accent-cyan); text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; width: 100%; }
 
     /* 3. MULTIPLE CHOICE ENGINE */
     .options-grid { display: flex; flex-direction: column; gap: 12px; }
-    .option-btn { background: #0f172a; border: 1px solid var(--border-color); color: var(--text-main); padding: 16px; border-radius: 10px; font-size: 1rem; text-align: left; cursor: pointer; transition: all 0.2s; }
-    .option-btn:hover { border-color: var(--accent-cyan); background: #1e293b; }
+    .option-btn { background: #0f172a; border: 1px solid var(--border-color); color: var(--text-main); padding: 16px; border-radius: 10px; font-size: 1rem; text-align: left; cursor: pointer; }
     .option-btn.correct { background: rgba(74, 222, 128, 0.2); border-color: var(--accent-green); color: var(--accent-green); }
     .option-btn.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--accent-red); color: var(--accent-red); }
 
-    /* CONTROLS & VICTORY */
     .action-bar { display: flex; justify-content: flex-end; margin-top: 24px; }
-    .btn-submit { background: var(--accent-cyan); color: #000; font-weight: bold; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
-    .btn-submit:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+    .btn-submit { background: var(--accent-cyan); color: #000; font-weight: bold; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; font-size: 1rem; width: 100%; text-align: center; }
 
-    .results-card { text-align: center; display: none; }
-    .results-card h2 { font-size: 2.2rem; color: var(--accent-yellow); margin-bottom: 12px; }
-    .results-card p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 24px; }
-
-    #loading { font-size: 1.2rem; color: var(--text-muted); margin-top: 50px; }
+    /* MOBILE RESPONSIVE TWEAKS */
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .quiz-hud { flex-direction: column; }
+      .btn-quit { width: 100%; }
+      .quiz-card { padding: 20px; }
+      .dots-wrapper { gap: 15px; } 
+      .dot-node { padding: 10px 8px; font-size: 0.75rem; flex-direction: column; text-align: center; gap: 6px; }
+      .quiz-img { max-width: 60px; max-height: 60px; }
+    }
   </style>
 </head>
 <body>
-
-  <div id="loading">Loading Energy Mission...</div>
-
+  
+  <div id="loading" style="margin-top: 50px;">Loading Energy Mission...</div>
+  
   <div id="quiz-container" style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center;">
-    
     <div class="quiz-hud">
       <div class="hud-stat" style="color: var(--accent-yellow);">⭐ Score: <span id="current-score">0</span></div>
       <div class="hud-stat" style="color: var(--accent-cyan);">Question <span id="q-index">1</span>/<span id="q-total">1</span></div>
-      <a href="student/dashboard.html" class="btn-quit">Quit Mission</a>
+      <a href="student/index.html" class="btn-quit">Quit Mission</a>
     </div>
 
-    <!-- QUIZ CARD -->
     <div class="quiz-card" id="question-card">
-      <div class="question-title" id="question-text">Loading question...</div>
+      <div class="question-title" id="question-text">Loading...</div>
       <div id="interactive-area"></div>
       <div class="action-bar" id="action-bar">
         <button class="btn-submit" id="check-btn">Submit Answer 🚀</button>
       </div>
     </div>
 
-    <!-- VICTORY OVERLAY -->
-    <div class="quiz-card results-card" id="results-card">
-      <h2>🎉 Mission Completed!</h2>
-      <p>Great job! You scored <strong id="final-xp" style="color: var(--accent-yellow);">+100 XP</strong>.</p>
-      <button class="btn-submit" onclick="window.location.href='student/dashboard.html'">Return to Student Dashboard</button>
+    <div class="quiz-card results-card" id="results-card" style="display: none; text-align: center;">
+      <h2 style="font-size: 2rem; color: var(--accent-yellow); margin-bottom: 12px;">🎉 Mission Completed!</h2>
+      <p style="margin-bottom: 24px;">Great job! You scored <strong id="final-xp">+100 XP</strong>.</p>
+      <button class="btn-submit" onclick="window.location.href='student/index.html'">Return to Dashboard</button>
     </div>
-
   </div>
 
   <script type="module">
     import { supabase } from './js/supabase.js';
+    let questions = []; let currentIndex = 0; let score = 0;
+    let selectedLeftDot = null; let userDotMatches = {}; let userDragAssignments = {};
 
-    let questions = [];
-    let currentIndex = 0;
-    let score = 0;
-
-    let selectedLeftDot = null;
-    let userDotMatches = {};
-    let userDragAssignments = {};
+    // Helper: Checks if text is an image URL and renders HTML accordingly
+    function renderContent(item) {
+      if (typeof item === 'string' && (item.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) || item.startsWith('http'))) {
+        return `<img src="${item}" class="quiz-img" alt="Quiz Image">`;
+      }
+      return `<span>${item}</span>`;
+    }
 
     async function initQuiz() {
       const urlParams = new URLSearchParams(window.location.search);
       const quizId = urlParams.get('quiz');
-
-      if (!quizId) {
-        alert('No quiz ID provided in URL.');
-        window.location.href = 'student/dashboard.html';
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('questions')
-        .select('*')
-        .eq('quiz_id', quizId);
-
-      if (error || !data || data.length === 0) {
-        document.getElementById('loading').textContent = 'No questions found for this quiz mission.';
-        return;
-      }
-
+      if (!quizId) { window.location.href = 'student/index.html'; return; }
+      const { data } = await supabase.from('questions').select('*').eq('quiz_id', quizId);
+      if (!data || data.length === 0) { document.getElementById('loading').textContent = 'No questions found.'; return; }
       questions = data;
       document.getElementById('loading').style.display = 'none';
       document.getElementById('quiz-container').style.display = 'flex';
       document.getElementById('q-total').textContent = questions.length;
-
       renderQuestion();
     }
 
@@ -142,219 +125,136 @@
       const q = questions[currentIndex];
       document.getElementById('q-index').textContent = currentIndex + 1;
       document.getElementById('current-score').textContent = score;
-
       const interactiveArea = document.getElementById('interactive-area');
       interactiveArea.innerHTML = '';
-
       const content = typeof q.content === 'string' ? JSON.parse(q.content) : q.content;
       document.getElementById('question-text').textContent = content.instruction || "Solve the challenge below:";
-
       const checkBtn = document.getElementById('check-btn');
       checkBtn.style.display = 'block';
 
-      // 1. CONNECT THE DOTS
-      if (q.type === 'Connect the Dots' && content.left_dots && content.right_dots) {
-        userDotMatches = {};
-        selectedLeftDot = null;
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'dots-wrapper';
-
+      if (q.type === 'Connect the Dots' && content.left_dots) {
+        userDotMatches = {}; selectedLeftDot = null;
+        const wrapper = document.createElement('div'); wrapper.className = 'dots-wrapper';
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.className = 'svg-canvas';
-        svg.id = 'svg-canvas';
-        wrapper.appendChild(svg);
+        svg.className = 'svg-canvas'; svg.id = 'svg-canvas'; wrapper.appendChild(svg);
 
-        const leftCol = document.createElement('div');
-        leftCol.className = 'dots-column';
+        const leftCol = document.createElement('div'); leftCol.className = 'dots-column';
         content.left_dots.forEach(item => {
-          const node = document.createElement('div');
-          node.className = 'dot-node';
-          node.dataset.value = item;
-          node.dataset.side = 'left';
-          node.innerHTML = `<span>${item}</span> <span>🔴</span>`;
-          node.onclick = () => selectLeftDot(node, item);
-          leftCol.appendChild(node);
+          const node = document.createElement('div'); node.className = 'dot-node'; node.dataset.side = 'left'; node.dataset.value = item;
+          // Render image if URL, otherwise text
+          node.innerHTML = `<div style="flex:1;">${renderContent(item)}</div> <span style="font-size: 1.2rem;">🔴</span>`;
+          node.onclick = () => selectLeftDot(node, item); leftCol.appendChild(node);
         });
 
-        const rightCol = document.createElement('div');
-        rightCol.className = 'dots-column';
+        const rightCol = document.createElement('div'); rightCol.className = 'dots-column';
         content.right_dots.forEach(item => {
-          const node = document.createElement('div');
-          node.className = 'dot-node';
-          node.dataset.value = item;
-          node.dataset.side = 'right';
-          node.innerHTML = `<span>🔵</span> <span>${item}</span>`;
-          node.onclick = () => selectRightDot(node, item);
-          rightCol.appendChild(node);
+          const node = document.createElement('div'); node.className = 'dot-node'; node.dataset.side = 'right'; node.dataset.value = item;
+          // Render image if URL, otherwise text
+          node.innerHTML = `<span style="font-size: 1.2rem;">🔵</span> <div style="flex:1; text-align:right;">${renderContent(item)}</div>`;
+          node.onclick = () => selectRightDot(node, item); rightCol.appendChild(node);
         });
 
-        wrapper.appendChild(leftCol);
-        wrapper.appendChild(rightCol);
+        wrapper.appendChild(leftCol); wrapper.appendChild(rightCol);
         interactiveArea.appendChild(wrapper);
-
-        checkBtn.onclick = () => verifyDotsAnswer(q);
-      } 
-      
-      // 2. DRAG AND DROP
-      else if (q.type === 'Drag & Drop' && content.items && content.targets) {
+        checkBtn.onclick = () => verifyDots(q);
+      } else if (q.type === 'Drag & Drop') {
         userDragAssignments = {};
-
-        const poolLabel = document.createElement('p');
-        poolLabel.style.fontSize = '0.85rem';
-        poolLabel.style.color = 'var(--text-muted)';
-        poolLabel.style.marginBottom = '8px';
-        poolLabel.textContent = 'Drag items into their correct category:';
-        interactiveArea.appendChild(poolLabel);
-
-        const pool = document.createElement('div');
-        pool.className = 'drag-pool';
-        pool.id = 'drag-pool';
-
+        const pool = document.createElement('div'); pool.className = 'drag-pool'; pool.id = 'drag-pool';
         content.items.forEach(item => {
-          const chip = document.createElement('div');
-          chip.className = 'drag-chip';
-          chip.textContent = item;
-          chip.draggable = true;
-          chip.id = 'chip-' + encodeURIComponent(item);
-          chip.ondragstart = (e) => e.dataTransfer.setData('text/plain', item);
+          const chip = document.createElement('div'); chip.className = 'drag-chip'; 
+          chip.innerHTML = renderContent(item); // Render image if URL
+          chip.draggable = true; chip.id = 'chip-' + encodeURIComponent(item);
+          chip.ondragstart = (e) => e.dataTransfer.setData('text/plain', item); 
           pool.appendChild(chip);
         });
         interactiveArea.appendChild(pool);
 
-        const grid = document.createElement('div');
-        grid.className = 'targets-grid';
-
+        const grid = document.createElement('div'); grid.className = 'targets-grid';
         content.targets.forEach(target => {
-          const zone = document.createElement('div');
-          zone.className = 'drop-zone';
-          zone.dataset.target = target;
-          zone.innerHTML = `<div class="drop-zone-title">${target}</div>`;
-
-          zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
-          zone.ondragleave = () => zone.classList.remove('drag-over');
+          const zone = document.createElement('div'); zone.className = 'drop-zone'; zone.dataset.target = target;
+          zone.innerHTML = `<div class="drop-zone-title">${renderContent(target)}</div>`;
+          zone.ondragover = (e) => { e.preventDefault(); };
           zone.ondrop = (e) => {
-            e.preventDefault();
-            zone.classList.remove('drag-over');
-            const item = e.dataTransfer.getData('text/plain');
+            e.preventDefault(); const item = e.dataTransfer.getData('text/plain');
             const chip = document.getElementById('chip-' + encodeURIComponent(item));
-            if (chip) {
-              zone.appendChild(chip);
-              userDragAssignments[item] = target;
-            }
+            if (chip) { zone.appendChild(chip); userDragAssignments[item] = target; }
           };
-
           grid.appendChild(zone);
         });
-
         interactiveArea.appendChild(grid);
-        checkBtn.onclick = () => verifyDragAnswer(q);
-      } 
-
-      // 3. MULTIPLE CHOICE
-      else {
+        checkBtn.onclick = () => verifyDrag(q);
+      } else {
         checkBtn.style.display = 'none';
-        const grid = document.createElement('div');
-        grid.className = 'options-grid';
-
+        const grid = document.createElement('div'); grid.className = 'options-grid';
         const options = content.options || [];
         const correctAns = typeof q.correct_answer === 'string' ? JSON.parse(q.correct_answer) : q.correct_answer;
-
         options.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className = 'option-btn';
-          btn.textContent = opt;
+          const btn = document.createElement('button'); btn.className = 'option-btn'; 
+          btn.innerHTML = renderContent(opt);
           btn.onclick = () => {
             const isRight = opt === correctAns.answer || opt === correctAns;
             btn.classList.add(isRight ? 'correct' : 'wrong');
             if (isRight) score += 100;
-            setTimeout(() => advanceQuestion(), 1200);
+            setTimeout(() => advanceQuestion(), 1000);
           };
           grid.appendChild(btn);
         });
-
         interactiveArea.appendChild(grid);
       }
     }
 
-    function selectLeftDot(element, value) {
-      document.querySelectorAll('[data-side="left"]').forEach(el => el.classList.remove('selected'));
-      element.classList.add('selected');
-      selectedLeftDot = { element, value };
+    function selectLeftDot(el, val) {
+      document.querySelectorAll('[data-side="left"]').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected'); selectedLeftDot = { element: el, value: val };
     }
 
-    function selectRightDot(element, value) {
+    function selectRightDot(el, val) {
       if (!selectedLeftDot) return;
-      userDotMatches[selectedLeftDot.value] = value;
-
-      selectedLeftDot.element.classList.remove('selected');
-      selectedLeftDot.element.classList.add('matched');
-      element.classList.add('matched');
-
-      drawConnectionLine(selectedLeftDot.element, element);
+      userDotMatches[selectedLeftDot.value] = val;
+      selectedLeftDot.element.classList.remove('selected'); selectedLeftDot.element.classList.add('matched');
+      el.classList.add('matched');
+      drawConnectionLine(selectedLeftDot.element, el);
       selectedLeftDot = null;
     }
 
     function drawConnectionLine(leftEl, rightEl) {
       const svg = document.getElementById('svg-canvas');
       const wrapperRect = svg.getBoundingClientRect();
-      const leftRect = leftEl.getBoundingClientRect();
-      const rightRect = rightEl.getBoundingClientRect();
-
-      const x1 = leftRect.right - wrapperRect.left;
-      const y1 = leftRect.top + leftRect.height / 2 - wrapperRect.top;
-      const x2 = rightRect.left - wrapperRect.left;
-      const y2 = rightRect.top + rightRect.height / 2 - wrapperRect.top;
-
+      const lRect = leftEl.getBoundingClientRect(); const rRect = rightEl.getBoundingClientRect();
+      const x1 = lRect.right - wrapperRect.left; const y1 = lRect.top + lRect.height / 2 - wrapperRect.top;
+      const x2 = rRect.left - wrapperRect.left; const y2 = rRect.top + rRect.height / 2 - wrapperRect.top;
       const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x1);
-      line.setAttribute('y1', y1);
-      line.setAttribute('x2', x2);
-      line.setAttribute('y2', y2);
-      line.setAttribute('stroke', '#38bdf8');
-      line.setAttribute('stroke-width', '3');
-      line.setAttribute('stroke-dasharray', '5,5');
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1); line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#38bdf8'); line.setAttribute('stroke-width', '3'); line.setAttribute('stroke-dasharray', '5,5');
       svg.appendChild(line);
     }
 
-    function verifyDotsAnswer(q) {
+    function verifyDots(q) {
       const correctObj = typeof q.correct_answer === 'string' ? JSON.parse(q.correct_answer) : q.correct_answer;
-      const expectedMatches = correctObj.matches || correctObj;
-
+      const expected = correctObj.matches || correctObj;
       let allCorrect = true;
-      for (const [key, val] of Object.entries(expectedMatches)) {
-        if (userDotMatches[key] !== val) allCorrect = false;
-      }
-
+      for (const [key, val] of Object.entries(expected)) { if (userDotMatches[key] !== val) allCorrect = false; }
       if (allCorrect) score += 100;
-      alert(allCorrect ? '✨ Correct connections!' : '❌ Incorrect matching.');
       advanceQuestion();
     }
 
-    function verifyDragAnswer(q) {
-      const expectedAssignments = typeof q.correct_answer === 'string' ? JSON.parse(q.correct_answer) : q.correct_answer;
-
+    function verifyDrag(q) {
+      const expected = typeof q.correct_answer === 'string' ? JSON.parse(q.correct_answer) : q.correct_answer;
       let allCorrect = true;
-      for (const [item, target] of Object.entries(expectedAssignments)) {
-        if (userDragAssignments[item] !== target) allCorrect = false;
-      }
-
+      for (const [item, target] of Object.entries(expected)) { if (userDragAssignments[item] !== target) allCorrect = false; }
       if (allCorrect) score += 100;
-      alert(allCorrect ? '✨ Correct sorting!' : '❌ Incorrect placement.');
       advanceQuestion();
     }
 
     function advanceQuestion() {
       currentIndex++;
-      if (currentIndex < questions.length) {
-        renderQuestion();
-      } else {
+      if (currentIndex < questions.length) { renderQuestion(); } 
+      else {
         document.getElementById('question-card').style.display = 'none';
         document.getElementById('results-card').style.display = 'block';
         document.getElementById('final-xp').textContent = `+${score} XP`;
       }
     }
-
     initQuiz();
   </script>
 </body>
